@@ -1,9 +1,10 @@
 <h1>{{ title }}</h1>
 <ul>
+  <p *ngIf="todos.length==0"><small>Não Tem Nenhuma Tarefa Hoje</small></p>
   <li *ngFor="let todo of todos">
-    {{ todo.id }}. {{ todo.title }} | 
-    <button *ngIf="!todo.done" (click)="markAsDone(todo)">Concluir</button> | 
-    <button *ngIf="todo.done" (click)="markAsUndone(todo)">Refazer</button> | 
+    {{ todo.title }} |
+    <button *ngIf="!todo.done" (click)="markAsDone(todo)">Concluir</button> |
+    <button *ngIf="todo.done" (click)="markAsUndone(todo)">Refazer</button> |
     <button (click)="remove(todo)">Remover</button>
   </li>
 </ul>
@@ -11,11 +12,14 @@
 <form [formGroup]="form">
   <fieldset>
     <label>Tarefa: </label>
-    <input 
-      type="text" 
-      placeholder="Titulo da terefa" 
-      maxlength="60" 
-      formControlName="title">
-    <button>Salvar</button>
+    <input
+      type="text"
+      placeholder="Titulo da terefa"
+      maxlength="60"
+      formControlName="title"
+    />
+
+    <small *ngIf="form.controls['title'].invalid && !form.controls['title'].pristine">Este campo deve conter entre 3 e 60 carac</small>
+    <button [disabled]="form.invalid" (click)="add()">Salvar</button>
   </fieldset>
 </form>
